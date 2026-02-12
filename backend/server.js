@@ -18,25 +18,29 @@ App.use(cookieParser())
 
 
 dotenv.config();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 mongoose
   .connect(process.env.mongo_uri)
   .then(console.log("connected"))
   .catch((error) => console.error(error));
 
-  
+
 
 App.listen(port, () => {
   console.log("server listening !");
 });
 
-const allowedOrigins = ['https://rent-a-ride-two.vercel.app', 'http://localhost:5173']; // Add allowed origins here
+const allowedOrigins = [
+  'https://rent-a-ride-two.vercel.app',
+  'http://localhost:5173',
+  process.env.CLIENT_URL // Add this for Render deployment
+];
 
 App.use(
   cors({
     origin: allowedOrigins,
-    methods:['GET', 'PUT', 'POST' ,'PATCH','DELETE'],
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
     credentials: true, // Enables the Access-Control-Allow-Credentials header
   })
 );
@@ -49,8 +53,8 @@ App.use('*', cloudinaryConfig);
 
 App.use("/api/user", userRoute);
 App.use("/api/auth", authRoute);
-App.use("/api/admin",adminRoute);
-App.use("/api/vendor",vendorRoute)
+App.use("/api/admin", adminRoute);
+App.use("/api/vendor", vendorRoute)
 
 
 

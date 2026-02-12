@@ -1,0 +1,45 @@
+services:
+  # 1. THE BACKEND API
+  - type: web
+    name: book-a-car-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: mongo_uri
+        sync: false
+      - key: ACCESS_TOKEN
+        sync: false
+      - key: REFRESH_TOKEN
+        sync: false
+      - key: CLOUD_NAME
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: API_SECRET
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: CLIENT_URL
+        sync: false # You will paste the frontend URL here after deployment
+
+  # 2. THE FRONTEND WEBSITE
+  - type: static
+    name: book-a-car-client
+    repo: https://github.com/ARXNDEV/BOOK_A_CAR # Optional: acts as context
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_PRODUCTION_BACKEND_URL
+        fromService:
+          type: web
+          name: book-a-car-backend
+          property: url
