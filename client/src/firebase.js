@@ -6,11 +6,12 @@ import { initializeApp } from "@firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "rent-a-ride-5af16.firebaseapp.com",
-  projectId: "rent-a-ride-5af16",
-  storageBucket: "rent-a-ride-5af16.appspot.com",
-  messagingSenderId: "1068277218849",
-  appId: "1:1068277218849:web:8966754aa388cea132ed60"
+  authDomain: "bookacar-9419d.firebaseapp.com",
+  projectId: "bookacar-9419d",
+  storageBucket: "bookacar-9419d.firebasestorage.app",
+  messagingSenderId: "685446528820",
+  appId: "1:685446528820:web:61cc03fe7968bdb7d22f61",
+  measurementId: "G-5R7E93GQ99"
 };
 
 // Initialize Firebase

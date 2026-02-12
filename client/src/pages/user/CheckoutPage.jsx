@@ -11,10 +11,10 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { displayRazorpay } from "./Razorpay";
+import { fetchLatestBooking } from "./Razorpay";
 import { setPageLoading } from "../../redux/user/userSlice";
 import { setisPaymentDone } from "../../redux/user/LatestBookingsSlice";
-import {toast, Toaster} from "sonner";
+import { toast, Toaster } from "sonner";
 // import { toast, Toaster } from "sonner";
 
 export async function sendBookingDetailsEmail(
@@ -125,6 +125,7 @@ const CheckoutPage = () => {
   //calculateing total price after coupon
   let totalPrice = price * Days ? Days + 50 - discount : "";
   //handle place order data
+  //handle place order data
   const handlePlaceOrder = async () => {
     const orderData = {
       user_id,
@@ -135,25 +136,46 @@ const CheckoutPage = () => {
       pickup_district,
       pickup_location,
       dropoff_location,
+      // Sending dummy payment IDs since payment gateway is removed
+      razorpayPaymentId: "PAYMENT_SKIPPED_" + Date.now(),
+      razorpayOrderId: "ORDER_SKIPPED_" + Date.now(),
     };
 
     try {
       dispatch(setPageLoading(true));
-      const displayRazorpayResponse = await displayRazorpay(
-        orderData,
-        navigate,
-        dispatch
-      );
 
-      if (!displayRazorpayResponse || !displayRazorpayResponse?.ok) {
+      // Directly call the bookCar API
+      const result = await fetch("/api/user/bookCar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const successStatus = await result.json();
+
+      if (successStatus) {
+        // dispatch(setIsSweetAlert(true)); // Assuming setIsSweetAlert is available here or imported if needed. It was imported in Razorpay.jsx, need to check if used here? No it was not imported here, wait. 
+        // Checking imports: setIsSweetAlert wasn't imported in CheckoutPage.jsx.  Let's check imports.
+
+        // Actually, logic from Razorpay.jsx needs to be moved here.
+        // 1. fetch latest bookings
+        await fetchLatestBooking(user_id, dispatch);
+
+        // 2. Navigate and stop loading
+        navigate("/");
         dispatch(setPageLoading(false));
-        toast.error(displayRazorpayResponse?.message);
+        toast.success("Car booked successfully!");
+      } else {
+        toast.error("Booking failed");
+        dispatch(setPageLoading(false));
       }
+
     } catch (error) {
       console.log(error);
       dispatch(setPageLoading(false));
-    }finally{
-      dispatch(setPageLoading(false))
+      toast.error("An error occurred during booking");
     }
   };
 
@@ -315,7 +337,7 @@ const CheckoutPage = () => {
                           {" "}
                           {dropoffDate?.humanReadable &&
                             new Date(dropoffDate.humanReadable).getMonth() +
-                              1}{" "}
+                            1}{" "}
                           :{" "}
                         </span>
                         <span> {dropoffDate?.year} </span>
