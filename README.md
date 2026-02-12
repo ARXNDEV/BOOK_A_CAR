@@ -9,7 +9,7 @@ This repository contains the code for a Full stack car rental website with 3 mod
 Clone BOOK A CAR
 
 ```bash
-https://github.com/ARXNDEV/Rent-a-Ride.git
+https://github.com/ARXNDEV/BOOK_A_CAR.git
 ```
 
 Install node modules
