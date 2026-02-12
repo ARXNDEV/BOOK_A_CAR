@@ -51,8 +51,9 @@ export default function VendorEditProductComponent() {
       if (editData && vehicle_id) {
         tostID = toast.loading("saving...", { position: "bottom-center" });
         const formData = editData;
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
         const res = await fetch(
-          `/api/vendor/vendorEditVehicles/${vehicle_id}`,
+          `${BASE_URL}/api/vendor/vendorEditVehicles/${vehicle_id}`,
           {
             method: "PUT",
             headers: {
@@ -81,7 +82,7 @@ export default function VendorEditProductComponent() {
 
   const handleClose = () => {
     navigate("/vendorDashboard/vendorAddProduct");
-  
+
   };
 
   return (

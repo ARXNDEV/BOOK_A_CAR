@@ -29,11 +29,12 @@ const VehicleDetails = () => {
   const navigate = useNavigate();
   let refreshToken = localStorage.getItem("refreshToken");
   let accessToken = localStorage.getItem('accessToken');
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/user/listAllVehicles", {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const res = await fetch(`${BASE_URL}/api/user/listAllVehicles`, {
           headers: { "Authorization": `Bearer ${refreshToken},${accessToken}` },
         });
         if (!res.ok) {

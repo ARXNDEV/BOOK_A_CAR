@@ -20,11 +20,12 @@ import { IoMdClose } from "react-icons/io";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import {  setLoading, setadminAddVehicleSuccess, setadminCrudError } from "../../../redux/adminSlices/adminDashboardSlice/StatusSlice";
+import { setLoading, setadminAddVehicleSuccess, setadminCrudError } from "../../../redux/adminSlices/adminDashboardSlice/StatusSlice";
 
 export const fetchModelData = async (dispatch) => {
   try {
-    const res = await fetch("/api/admin/getVehicleModels", {
+    const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+    const res = await fetch(`${BASE_URL}/api/admin/getVehicleModels`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -75,14 +76,14 @@ export const fetchModelData = async (dispatch) => {
 };
 
 const AddProductModal = () => {
-  const { register, handleSubmit, control , reset } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAddVehicleClicked } = useSelector((state) => state.addVehicle);
   const { modelData, companyData, locationData, districtData } = useSelector(
     (state) => state.modelDataSlice
   );
-  const {loading} = useSelector(state => state.statusSlice)
+  const { loading } = useSelector(state => state.statusSlice)
 
   useEffect(() => {
     fetchModelData(dispatch);
@@ -90,7 +91,7 @@ const AddProductModal = () => {
   }, []);
 
   const onSubmit = async (addData) => {
-   
+
     try {
       const img = [];
       for (let i = 0; i < addData.image.length; i++) {
@@ -119,16 +120,17 @@ const AddProductModal = () => {
       formData.append("location", addData.vehicleLocation);
       formData.append("district", addData.vehicleDistrict
       );
-   
+
 
       let tostID;
       if (formData) {
         tostID = toast.loading("saving...", { position: "bottom-center" });
         dispatch(setLoading(true))
       }
-      const res = await fetch("/api/admin/addProduct", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/addProduct`, {
         method: "POST",
-        body:formData
+        body: formData
       });
 
       if (!res.ok) {
@@ -157,7 +159,7 @@ const AddProductModal = () => {
 
   return (
     <>
-    {loading  ? <Toaster/> : null }
+      {loading ? <Toaster /> : null}
       {isAddVehicleClicked && (
         <div>
           <button onClick={handleClose} className="relative left-10 top-5">
@@ -521,7 +523,7 @@ const AddProductModal = () => {
                   </div>
                 </div>
                 <div className="mt-10 flex justify-start items-center ml-7 mb-10">
-                  <Button variant="contained"  type="submit">
+                  <Button variant="contained" type="submit">
                     Submit
                   </Button>
                 </div>

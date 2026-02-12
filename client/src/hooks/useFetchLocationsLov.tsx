@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+/// <reference types="vite/client" />
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCompanyData, setDistrictData, setLocationData, setModelData } from "../redux/adminSlices/adminDashboardSlice/CarModelDataSlice";
 import { setWholeData } from "../redux/user/selectRideSlice";
+
+interface VehicleModelData {
+  type: string;
+  model: string;
+  brand: string;
+  location: string;
+  district: string;
+}
 
 const useFetchLocationsLov = () => {
   const dispatch = useDispatch();
@@ -10,7 +19,8 @@ const useFetchLocationsLov = () => {
   const fetchLov = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/admin/getVehicleModels", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/getVehicleModels`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -18,7 +28,7 @@ const useFetchLocationsLov = () => {
       });
 
       if (res.ok) {
-        const data = await res.json();
+        const data: VehicleModelData[] = await res.json();
 
         //getting models from data
         const models = data.filter((cur) => cur.type === "car").map((cur) => cur.model);

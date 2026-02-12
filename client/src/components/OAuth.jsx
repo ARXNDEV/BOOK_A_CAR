@@ -12,7 +12,8 @@ function OAuth() {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const res = await fetch("/api/auth/google", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

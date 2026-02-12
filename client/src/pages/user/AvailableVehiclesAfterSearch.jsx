@@ -24,7 +24,8 @@ const AvailableVehiclesAfterSearch = () => {
         dropOffDate: dropoffDate.humanReadable,
         model,
       };
-      const res = await fetch("/api/user/getVehiclesWithoutBooking", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/user/getVehiclesWithoutBooking`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

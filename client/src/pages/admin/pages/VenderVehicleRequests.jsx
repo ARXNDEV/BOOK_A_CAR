@@ -13,14 +13,15 @@ import { setUpdateRequestTable, setVenodrVehilces, setadminVenodrRequest } from 
 
 
 const VenderVehicleRequests = () => {
-  const { vendorVehicleApproved, vendorVehilces ,adminVenodrRequest } = useSelector(
+  const { vendorVehicleApproved, vendorVehilces, adminVenodrRequest } = useSelector(
     (state) => state.vendorDashboardSlice
   );
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchVendorRequest = async () => {
       try {
-        const res = await fetch(`/api/admin/fetchVendorVehilceRequests`, {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const res = await fetch(`${BASE_URL}/api/admin/fetchVendorVehilceRequests`, {
           method: "GET",
         });
         if (!res.ok) {
@@ -46,7 +47,8 @@ const VenderVehicleRequests = () => {
   const handleApproveRequest = async (id) => {
     try {
       dispatch(setUpdateRequestTable(id))
-      const res = await fetch("/api/admin/approveVendorVehicleRequest", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/approveVendorVehicleRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +62,7 @@ const VenderVehicleRequests = () => {
         console.log("error");
       }
       const data = await res.json();
-     console.log(data)
+      console.log(data)
     } catch (error) {
       console.log(error);
     }
@@ -69,8 +71,9 @@ const VenderVehicleRequests = () => {
   //reject vendor Vehilce Request
   const handleReject = async (id) => {
     try {
-     
-      const res = await fetch("/api/admin/rejectVendorVehicleRequest", {
+
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/rejectVendorVehicleRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +130,7 @@ const VenderVehicleRequests = () => {
         ) : (
           <div className="text-green-500   bg-green-100 p-2 rounded-lg flex items-center justify-center gap-x-1">
             <span className="text-[8px]">Approved</span>
-            <GrStatusGood  />
+            <GrStatusGood />
           </div>
         ),
     },
@@ -138,9 +141,9 @@ const VenderVehicleRequests = () => {
       renderCell: (params) => (
         <Button
           className="bg-green-500"
-          onClick={() => {handleApproveRequest(params.row.id), dispatch(setUpdateRequestTable(params.row.id))}}
+          onClick={() => { handleApproveRequest(params.row.id), dispatch(setUpdateRequestTable(params.row.id)) }}
         >
-          <GrStatusGood style={{ fontSize: 24 , color: 'green' }}/>
+          <GrStatusGood style={{ fontSize: 24, color: 'green' }} />
         </Button>
       ),
     },
@@ -151,16 +154,16 @@ const VenderVehicleRequests = () => {
       renderCell: (params) => (
         <Button
           className="bg-red-200"
-          onClick={() => {handleReject(params.row.id), dispatch(setUpdateRequestTable(params.row.id))}}
+          onClick={() => { handleReject(params.row.id), dispatch(setUpdateRequestTable(params.row.id)) }}
         >
-          <IoIosCloseCircle style={{ fontSize: 28 , color:'red' }}/>
+          <IoIosCloseCircle style={{ fontSize: 28, color: 'red' }} />
         </Button>
       ),
     },
   ];
 
   const rows =
-  adminVenodrRequest && 
+    adminVenodrRequest &&
     adminVenodrRequest
       .filter((vehicle) => vehicle.isDeleted === "false")
       .map((vehicle) => ({
@@ -172,41 +175,41 @@ const VenderVehicleRequests = () => {
         status: !vehicle.isAdminApproved,
       }))
 
-      const isVendorVehiclesEmpty = vendorVehilces && vendorVehilces.length === 0;
+  const isVendorVehiclesEmpty = vendorVehilces && vendorVehilces.length === 0;
   return (
-  <div className="max-w-[1000px]  d-flex   justify-end text-start items-end p-10 bg-slate-100 rounded-md">
+    <div className="max-w-[1000px]  d-flex   justify-end text-start items-end p-10 bg-slate-100 rounded-md">
       {isVendorVehiclesEmpty ? (
-      <p>No requests yet</p>
-    ) : 
-    <Box sx={{ height: "100%", width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize:
-                vendorVehicleApproved && vendorVehicleApproved.length > 10
-                  ? 10
-                  : 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        
-        disableRowSelectionOnClick
-        sx={{
-          ".MuiDataGrid-columnSeparator": {
-            display: "none",
-          },
-          "&.MuiDataGrid-root": {
-            border: "none",
-          },
-        }}
-      />
-    </Box>
-}
-  </div>
+        <p>No requests yet</p>
+      ) :
+        <Box sx={{ height: "100%", width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize:
+                    vendorVehicleApproved && vendorVehicleApproved.length > 10
+                      ? 10
+                      : 5,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+
+            disableRowSelectionOnClick
+            sx={{
+              ".MuiDataGrid-columnSeparator": {
+                display: "none",
+              },
+              "&.MuiDataGrid-root": {
+                border: "none",
+              },
+            }}
+          />
+        </Box>
+      }
+    </div>
   )
 };
 

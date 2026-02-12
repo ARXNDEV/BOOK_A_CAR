@@ -29,7 +29,8 @@ function AllVehicles() {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const res = await fetch("/api/admin/showVehicles", {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const res = await fetch(`${BASE_URL}/api/admin/showVehicles`, {
           method: "GET",
         });
         if (res.ok) {
@@ -48,7 +49,8 @@ function AllVehicles() {
   const handleDelete = async (vehicle_id) => {
     try {
       setVehicles(allVehicles.filter((cur) => cur._id !== vehicle_id));
-      const res = await fetch(`/api/admin/deleteVehicle/${vehicle_id}`, {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/deleteVehicle/${vehicle_id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -139,27 +141,27 @@ function AllVehicles() {
     else if (adminAddVehicleSuccess) {
       toast.success("success");
     }
-    else if(adminCrudError){
-     toast.error("error")
+    else if (adminCrudError) {
+      toast.error("error")
     }
-  }, [adminEditVehicleSuccess, adminAddVehicleSuccess,adminCrudError,dispatch]);
+  }, [adminEditVehicleSuccess, adminAddVehicleSuccess, adminCrudError, dispatch]);
 
   useEffect(() => {
     const clearNotificationsTimeout = setTimeout(() => {
       dispatch(clearAdminVehicleToast());
     }, 3000);
-  
+
     return () => clearTimeout(clearNotificationsTimeout);
   }, [adminEditVehicleSuccess, adminAddVehicleSuccess, adminCrudError, dispatch]);
 
   return (
     <>
 
-      {adminEditVehicleSuccess ? <Toaster /> : ''} 
-        {adminAddVehicleSuccess ? <Toaster /> : ''}
-        {adminCrudError ? <Toaster/> : ""}     
-        
-        
+      {adminEditVehicleSuccess ? <Toaster /> : ''}
+      {adminAddVehicleSuccess ? <Toaster /> : ''}
+      {adminCrudError ? <Toaster /> : ""}
+
+
       <div className="max-w-[1000px]  d-flex   justify-end text-start items-end p-10">
         <Header title="AllVehicles" />
         <Box sx={{ height: "100%", width: "100%" }}>

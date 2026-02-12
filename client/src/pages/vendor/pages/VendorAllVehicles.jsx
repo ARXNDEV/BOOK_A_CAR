@@ -26,7 +26,7 @@ const VendorAllVehicles = () => {
   const dispatch = useDispatch();
 
   const { isAddVehicleClicked } = useSelector((state) => state.addVehicle);
-  const { vendorVehilces, vendorEditSuccess,vendorDeleteSuccess, vendorErrorSuccess } = useSelector(
+  const { vendorVehilces, vendorEditSuccess, vendorDeleteSuccess, vendorErrorSuccess } = useSelector(
     (state) => state.vendorDashboardSlice
   );
   const { _id } = useSelector((state) => state.user.currentUser);
@@ -34,7 +34,8 @@ const VendorAllVehicles = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/vendor/showVendorVehilces", {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const res = await fetch(`${BASE_URL}/api/vendor/showVendorVehilces`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -159,11 +160,11 @@ const VendorAllVehicles = () => {
       dispatch(setVendorEditSuccess(false));
     }
 
-     //deleted success
-     if(vendorDeleteSuccess){
+    //deleted success
+    if (vendorDeleteSuccess) {
       toast.success("Vehicle Deleted")
       dispatch(setVendorDeleteSuccess(false))
-     }
+    }
 
     //showing error if error
     if (vendorErrorSuccess) {
@@ -171,13 +172,13 @@ const VendorAllVehicles = () => {
       dispatch(setVendorError(false));
     }
 
-   
-  }, [vendorEditSuccess,vendorDeleteSuccess]);
+
+  }, [vendorEditSuccess, vendorDeleteSuccess]);
 
   return (
     <div className="max-w-[1000px]  d-flex   justify-end text-start items-end p-10 bg-slate-100 rounded-md">
       {vendorEditSuccess && <Toaster />}
-      {vendorDeleteSuccess && <Toaster/>}
+      {vendorDeleteSuccess && <Toaster />}
 
       <VendorHeader title="AllVehicles" />
       {isVendorVehiclesEmpty ? (

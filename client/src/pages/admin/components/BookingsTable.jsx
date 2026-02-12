@@ -8,7 +8,8 @@ const BookingsTable = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch("/api/admin/allBookings", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/admin/allBookings`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +31,8 @@ const BookingsTable = () => {
 
     const changeVehicleStatus = async () => {
       try {
-        const isStatusChanged = await fetch("/api/admin/changeStatus", {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const isStatusChanged = await fetch(`${BASE_URL}/api/admin/changeStatus`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -107,18 +109,18 @@ const BookingsTable = () => {
       renderCell: (params) => {
         return (
           <select
-          className="px-4 py-2"
-          value={params.selectedValue}
-          onChange={(e) => {
-            handleStatusChange(e, params)
-          }}
-        >
-          {params.value.map((cur, idx) => (
-            <option key={idx} value={cur}>
-              {cur}
-            </option>
-          ))}
-        </select>
+            className="px-4 py-2"
+            value={params.selectedValue}
+            onChange={(e) => {
+              handleStatusChange(e, params)
+            }}
+          >
+            {params.value.map((cur, idx) => (
+              <option key={idx} value={cur}>
+                {cur}
+              </option>
+            ))}
+          </select>
         )
       }
     },

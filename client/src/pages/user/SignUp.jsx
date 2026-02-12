@@ -33,7 +33,8 @@ function SignUp() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/signup", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

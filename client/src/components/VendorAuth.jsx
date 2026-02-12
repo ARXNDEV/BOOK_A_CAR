@@ -12,7 +12,8 @@ function VendorOAuth() {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const res = await fetch("/api/vendor/vendorgoogle", {
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const res = await fetch(`${BASE_URL}/api/vendor/vendorgoogle`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,17 +27,17 @@ function VendorOAuth() {
       console.log(res)
       const data = await res.json();
       console.log(data)
-      if(res.ok){
+      if (res.ok) {
         dispatch(signInSuccess(data));
         navigate('/vendorDashboard')
       }
-      else{
+      else {
         dispatch(signInFailure(data))
         navigate('/vendorSignin')
-        
+
       }
-     
-      
+
+
     } catch (error) {
       console.log('could not login with google ', error);
     }
@@ -51,7 +52,7 @@ function VendorOAuth() {
         <span className="icon-[devicon--google]"></span>
         <span>Continue with Google</span>
       </button>
-     
+
     </div>
   );
 }

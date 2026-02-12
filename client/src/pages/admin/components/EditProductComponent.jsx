@@ -53,7 +53,8 @@ export default function EditProductComponent() {
         tostID = toast.loading("saving...", { position: "bottom-center" });
         const formData = editData;
         dispatch(setEditData({ _id: vehicle_id, ...formData }));
-        const res = await fetch(`/api/admin/editVehicle/${vehicle_id}`, {
+        const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const res = await fetch(`${BASE_URL}/api/admin/editVehicle/${vehicle_id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -61,9 +62,9 @@ export default function EditProductComponent() {
           body: JSON.stringify({ formData }),
         });
 
-        if(!res.ok){
-        toast.error("error");
-        toast.dismiss(tostID);
+        if (!res.ok) {
+          toast.error("error");
+          toast.dismiss(tostID);
         }
 
         if (res.ok) {
@@ -149,7 +150,7 @@ export default function EditProductComponent() {
                 {...register("name")}
                 defaultValue={updateingItem?.name || ""}
               />
-              
+
               <Controller
                 control={control}
                 name="model"

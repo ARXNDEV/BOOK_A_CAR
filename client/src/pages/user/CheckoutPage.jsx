@@ -23,7 +23,8 @@ export async function sendBookingDetailsEmail(
   dispatch
 ) {
   try {
-    const sendEamil = await fetch("/api/user/sendBookingDetailsEamil", {
+    const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+    const sendEamil = await fetch(`${BASE_URL}/api/user/sendBookingDetailsEamil`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,8 +145,9 @@ const CheckoutPage = () => {
     try {
       dispatch(setPageLoading(true));
 
+      const BASE_URL = import.meta.env.VITE_PRODUCTION_BACKEND_URL;
       // Directly call the bookCar API
-      const result = await fetch("/api/user/bookCar", {
+      const result = await fetch(`${BASE_URL}/api/user/bookCar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
