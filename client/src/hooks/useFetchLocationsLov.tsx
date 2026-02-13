@@ -57,7 +57,8 @@ const useFetchLocationsLov = () => {
         dispatch(setWholeData(wholeData));
 
       } else {
-        return "no data found";
+        console.error("Failed to fetch locations LOV:", res.status, res.statusText);
+        return;
       }
     } catch (error) {
       console.log(error);

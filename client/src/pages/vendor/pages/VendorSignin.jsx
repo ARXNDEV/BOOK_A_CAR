@@ -43,13 +43,14 @@ function VendorSignin() {
       });
       const data = await res.json();
 
-      if (data.succes === false) {
+      if (data.success === false) {
         dispatch(signInFailure(data));
         return;
       }
       if (data.isVendor) {
-        navigate("/vendorDashboard");
         dispatch(signInSuccess(data));
+        navigate("/vendorDashboard");
+        return;
       }
     } catch (error) {
       dispatch(signInFailure(error));

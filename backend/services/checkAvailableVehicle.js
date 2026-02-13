@@ -21,7 +21,11 @@ export async function availableAtDate(pickupDate, dropOffDate) {
     // const vehiclesWithoutBookings = await Vehicle.find({ _id: { $nin: uniqueVehicleIds } });
     // return vehiclesWithoutBookings || [];
 
-    const existingBookings = await Booking.find({
+    // Find bookings that overlap with the requested date range AND have a blocking status
+    const blockingStatuses = ["booked", "onTrip", "notPicked", "overDue"];
+
+    const overlappingBookings = await Booking.find({
+      status: { $in: blockingStatuses },
       $or: [
         { pickupDate: { $lt: dropOffDate }, dropOffDate: { $gt: pickupDate } }, // Overlap condition
         { pickupDate: { $gte: pickupDate, $lt: dropOffDate } }, // Start within range
@@ -33,35 +37,15 @@ export async function availableAtDate(pickupDate, dropOffDate) {
       ],
     });
 
-    const vehicleIds = existingBookings.map((booking) => booking.vehicleId);
-    const uniqueVehicleIds = [...new Set(vehicleIds)];
+    const occupiedVehicleIds = overlappingBookings.map((booking) => booking.vehicleId);
+    const uniqueOccupiedVehicleIds = [...new Set(occupiedVehicleIds)];
 
-    // Find vehicles with status "tripCompleted" during the specified date range
-    const vehiclesWithCompletedTrips = await Booking.find(
-      {
-        $or: [
-          { status: "tripCompleted" },
-          { status: "canceled" },
-          { status: "notBooked" },
-        ],
-        pickupDate: { $lt: dropOffDate },
-        dropOffDate: { $gt: pickupDate },
-      },
-      { vehicleId: 1 }
-    );
-
-    const vehicleIdsWithCompletedTrips = vehiclesWithCompletedTrips.map(
-      (booking) => booking.vehicleId
-    );
-
-    const vehiclesWithoutBookings = await Vehicle.find({
-      $or: [
-        { _id: { $nin: uniqueVehicleIds } }, // Vehicles without bookings
-        { _id: { $in: vehicleIdsWithCompletedTrips } }, // Vehicles with completed trips
-      ],
+    // Find vehicles that are NOT in the occupied list
+    const availableVehicles = await Vehicle.find({
+      _id: { $nin: uniqueOccupiedVehicleIds },
     });
 
-    return vehiclesWithoutBookings || [];
+    return availableVehicles || [];
   } catch (error) {
     console.log(error);
     throw error;

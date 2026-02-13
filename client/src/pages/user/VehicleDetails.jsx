@@ -91,8 +91,9 @@ const VehicleDetails = () => {
                   <div className="max-w-xl overflow-hidden rounded-lg relative">
                     <img
                       className="h-full w-full max-w-full object-cover"
-                      src={singleVehicleDetail && singleVehicleDetail.image[0]}
+                      src={singleVehicleDetail && singleVehicleDetail.image[0] ? singleVehicleDetail.image[0] : "https://placehold.co/600x400?text=No+Image"}
                       alt={singleVehicleDetail.model}
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400?text=No+Image" }}
                     />
                   </div>
                 </div>
@@ -118,8 +119,9 @@ const VehicleDetails = () => {
                         >
                           <img
                             className="h-full w-full object-cover"
-                            src={cur}
+                            src={cur ? cur : "https://placehold.co/150x150?text=No+Image"}
                             alt=""
+                            onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/150x150?text=No+Image" }}
                           />
                         </button>
                       ))}

@@ -17,12 +17,12 @@ App.use(express.json());
 App.use(cookieParser())
 
 
-dotenv.config();
+dotenv.config({ path: "./backend/.env" });
 const port = process.env.PORT || 3000;
 
 mongoose
   .connect(process.env.mongo_uri)
-  .then(console.log("connected"))
+  .then(() => console.log("connected"))
   .catch((error) => console.error(error));
 
 
@@ -62,7 +62,7 @@ App.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "internal server error";
   return res.status(statusCode).json({
-    succes: false,
+    success: false,
     message,
     statusCode,
   });

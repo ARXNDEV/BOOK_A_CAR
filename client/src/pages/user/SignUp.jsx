@@ -41,7 +41,7 @@ function SignUp() {
       });
       const data = await res.json();
       setLoading(false);
-      if (data.succes === false) {
+      if (data.success === false) {
         setError(true);
         return;
       }

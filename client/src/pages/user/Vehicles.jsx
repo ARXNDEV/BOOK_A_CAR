@@ -112,9 +112,10 @@ const Vehicles = () => {
                           <div className="mx-auto max-w-[320px] px-4 py-2 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
                             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden object-contain rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-80 mb-3">
                               <img
-                                src={`${cur.image[0]}`}
-                                alt={`cur.name`}
+                                src={cur.image && cur.image.length > 0 ? cur.image[0] : "https://placehold.co/600x400?text=No+Image"}
+                                alt={cur.name}
                                 className=" w-full object-contain object-center lg:h-full lg:w-full"
+                                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400?text=No+Image" }}
                               />
                             </div>
                             <div className="flex justify-between items-start">
@@ -203,9 +204,10 @@ const Vehicles = () => {
                           <div className="mx-auto max-w-[320px] px-4 py-2 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
                             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden object-contain rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-80 mb-3">
                               <img
-                                src={`${cur.image[0]}`}
-                                alt={`cur.name`}
+                                src={cur.image && cur.image.length > 0 ? cur.image[0] : "https://placehold.co/600x400?text=No+Image"}
+                                alt={cur.name}
                                 className=" w-full object-contain object-center lg:h-full lg:w-full"
+                                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400?text=No+Image" }}
                               />
                             </div>
                             <div className="flex justify-between items-start">

@@ -73,7 +73,7 @@ function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      
+
       if (data?.accessToken) {
         localStorage.removeItem(("accessToken"))
         localStorage.setItem("accessToken", data.accessToken);
@@ -83,7 +83,7 @@ function SignIn() {
         localStorage.setItem("refreshToken", data.refreshToken)
       }
 
-      if (data.succes === false || !res.ok) {
+      if (data.success === false || !res.ok) {
         dispatch(loadingEnd());
         dispatch(signInFailure(data));
 
@@ -93,13 +93,16 @@ function SignIn() {
         dispatch(signInSuccess(data));
         dispatch(loadingEnd());
         navigate("/adminDashboard");
+        return;
       } else if (data.isUser) {
         dispatch(signInSuccess(data));
         dispatch(loadingEnd());
         navigate("/");
+        return;
       } else {
         dispatch(loadingEnd());
         dispatch(signInFailure(data));
+        return;
       }
       dispatch(loadingEnd());
       dispatch(signInFailure("something went wrong"));
